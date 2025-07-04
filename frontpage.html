@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Personal Finance Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="tracker-container">
+    <h1>Personal Finance Tracker</h1>
+
+    <div class="balance" id="balance">
+    Balance: ₹0
+    </div>
+
+    <form id="transactionForm" class="transaction-form">
+    <input type="text" id="description" placeholder="Description" required>
+    <input type="number" id="amount" placeholder="Amount (use negative for expense)" required>
+    <button type="submit">Add Transaction</button>
+    </form>
+
+    <ul class="transaction-list" id="transactionList">
+    <!-- Transactions will appear here -->
+    </ul>
+
+    <div class="footer">Made with ❤️ for your savings</div>
+</div>
+
+<script>
+    const form = document.getElementById('transactionForm');
+    const transactionList = document.getElementById('transactionList');
+    const balanceDisplay = document.getElementById('balance');
+
+    let balance = 0;
+
+    form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const description = document.getElementById('description').value;
+    const amount = parseFloat(document.getElementById('amount').value);
+
+    if (!description || isNaN(amount)) return;
+
+    const li = document.createElement('li');
+    li.classList.add('transaction-item');
+    li.classList.add(amount < 0 ? 'expense' : 'income');
+    li.innerHTML = `
+        <span>${description}</span>
+        <span>${amount < 0 ? '-' : '+'}₹${Math.abs(amount)}</span>
+    `;
+
+    transactionList.appendChild(li);
+
+    balance += amount;
+    updateBalance();
+
+    form.reset();
+    });
+
+    function updateBalance() {
+        balanceDisplay.textContent = `Balance: ₹${balance.toFixed(2)}`;
+        balanceDisplay.style.color = balance >= 0 ? '#27ae60' : '#e74c3c';
+    }
+    </script>
+
+</body>
+</html>
